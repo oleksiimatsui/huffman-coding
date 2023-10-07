@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/FirstFragment">
+
+    <fragment
+        android:id="@+id/FirstFragment"
+        android:name="com.example.huffman.HomeFragment"
+        android:label="@string/home_fragment_label"
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/SecondFragment"
+        android:name="com.example.huffman.EncodeFragment"
+        android:label="@string/encode_fragment_label"
+        tools:layout="@layout/fragment_encode">
+
+        <action
+            android:id="@+id/action_SecondFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_encode_fragment_to_encodeResultFragment"
+            app:argType="string"
+            android:defaultValue="default text"
+            app:destination="@id/encodeResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/encodeResultFragment"
+        android:name="com.example.huffman.EncodeResultFragment"
+        android:label="Encoding result"
+        tools:layout="@layout/fragment_encode_result" />
+</navigation>
