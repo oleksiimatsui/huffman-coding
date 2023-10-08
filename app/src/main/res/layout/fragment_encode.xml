@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="@color/white"
     tools:context=".EncodeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,6 +16,7 @@
             android:id="@+id/button_encode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/black"
             android:text="Encode"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
@@ -25,6 +27,8 @@
             android:id="@+id/input_text"
             android:layout_width="347dp"
             android:layout_height="236dp"
+            android:layout_marginTop="44dp"
+            android:backgroundTint="@color/white"
             android:ems="10"
             android:gravity="start|top"
             android:inputType="textMultiLine"

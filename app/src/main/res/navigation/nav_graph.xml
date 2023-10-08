@@ -34,5 +34,14 @@
         android:id="@+id/encodeResultFragment"
         android:name="com.example.huffman.EncodeResultFragment"
         android:label="Encoding result"
-        tools:layout="@layout/fragment_encode_result" />
+        tools:layout="@layout/fragment_encode_result" >
+        <action
+            android:id="@+id/action_encodeResultFragment_to_decodeResultFragment"
+            app:destination="@id/decodeResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/decodeResultFragment"
+        android:name="com.example.huffman.DecodeResultFragment"
+        android:label="Decoding result"
+        tools:layout="@layout/fragment_decode_result" />
 </navigation>

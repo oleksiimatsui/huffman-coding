@@ -11,18 +11,22 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link EncodeResultFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.google.gson.Gson;
+
+
 public class EncodeResultFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "TEXT";
 
-    private String mParam1;
+    private String text;
+
+    private String code;
+
+    private HuffmanNode root;
     public EncodeResultFragment() {
         // Required empty public constructor
     }
@@ -39,7 +43,7 @@ public class EncodeResultFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            text = getArguments().getString(ARG_PARAM1);
         }
     }
 
@@ -62,9 +66,11 @@ public class EncodeResultFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_encode_result, container, false);
         TextView name = (TextView) rootView.findViewById(R.id.encode_result);
 
-        HuffmanEncodeResult huffmanResult = Huffman.Encode(mParam1);
+        HuffmanEncodeResult huffmanResult = Huffman.Encode(text);
         String encoded = huffmanResult.encoded;
         name.setText(encoded);
+        code = encoded;
+        root = huffmanResult.root;
 
         TableLayout table = (TableLayout) (rootView.findViewById(R.id.encode_table));
         huffmanResult.table.forEach((key, value) -> {
@@ -85,5 +91,23 @@ public class EncodeResultFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        view.findViewById(R.id.decode_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("CODE", code);
+                Gson gson = new Gson();
+                String rootString = gson.toJson(root);
+
+                bundle.putString("ROOT", rootString);
+                NavHostFragment.findNavController(EncodeResultFragment.this)
+                        .navigate(R.id.action_encodeResultFragment_to_decodeResultFragment, bundle);
+            }
+        });
     }
 }
