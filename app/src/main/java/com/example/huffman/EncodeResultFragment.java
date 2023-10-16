@@ -2,7 +2,9 @@ package com.example.huffman;
 
 import static android.view.View.generateViewId;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,23 +17,27 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 
 public class EncodeResultFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "TEXT";
+    private static final String ARG_PARAM2 = "ENCODEDATA";
 
     private String text;
 
-    private String code;
-
-    private HuffmanNode root;
+    private HuffmanEncodeData data;
     public EncodeResultFragment() {
         // Required empty public constructor
     }
 
-    public static EncodeResultFragment newInstance(String text) {
+    public static EncodeResultFragment newInstance(String text, HuffmanEncodeData data) {
         EncodeResultFragment fragment = new EncodeResultFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, text);
@@ -69,14 +75,14 @@ public class EncodeResultFragment extends Fragment {
         HuffmanEncodeResult huffmanResult = Huffman.Encode(text);
         String encoded = huffmanResult.encoded;
         name.setText(encoded);
-        code = encoded;
-        root = huffmanResult.root;
-
+        String code = encoded;
+        HuffmanNode root = huffmanResult.root;
+        data = new HuffmanEncodeData(code, root);
         TableLayout table = (TableLayout) (rootView.findViewById(R.id.encode_table));
         huffmanResult.table.forEach((key, value) -> {
             char c = key;
             int freq = value.freq;
-            String code = value.code;
+            String codee = value.code;
             TableRow tr_head = new TableRow(this.getContext());
             tr_head.setLayoutParams(new TableRow.LayoutParams(
                     TableRow.LayoutParams.MATCH_PARENT,
@@ -84,7 +90,7 @@ public class EncodeResultFragment extends Fragment {
             tr_head.setWeightSum(3);
 
             tr_head.addView(label(String.valueOf(c)));// add the column to the table row here
-            tr_head.addView(label(String.valueOf(code)));
+            tr_head.addView(label(String.valueOf(codee)));
             tr_head.addView(label(String.valueOf(freq)));
 
             table.addView(tr_head);
@@ -100,14 +106,64 @@ public class EncodeResultFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putString("CODE", code);
                 Gson gson = new Gson();
-                String rootString = gson.toJson(root);
-
-                bundle.putString("ROOT", rootString);
+                String rootString = gson.toJson(data);
+                bundle.putString("EncodeData", rootString);
                 NavHostFragment.findNavController(EncodeResultFragment.this)
                         .navigate(R.id.action_encodeResultFragment_to_decodeResultFragment, bundle);
             }
         });
+
+        view.findViewById(R.id.save).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Dialog dialog = new Dialog(view.getContext());
+                dialog.setContentView(R.layout.name_dialog);
+                dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+
+
+                View save = dialog.findViewById(R.id.save_file_btn);
+                save.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Gson gson = new Gson();
+                        String dataString = gson.toJson(data);
+                        TextInputLayout textInputLayout = dialog.findViewById(R.id.filename_input_layout);
+                        String text = String.valueOf(textInputLayout.getEditText().getText());
+                        dialog.dismiss();
+                        writeToFile(view, text, dataString);
+                    }
+                });
+                dialog.show();
+            }
+        });
+    }
+
+    public void writeToFile(View view, String name, String text) {
+
+        //Checking the availability state of the External Storage.
+        String state = Environment.getExternalStorageState();
+        if (!Environment.MEDIA_MOUNTED.equals(state)) {
+            //If it isn't mounted - we can't write into it.
+            return;
+        }
+        //Create a new file that points to the root directory, with the given name:
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), name + ".txt");
+        //This point and below is responsible for the write operation
+        FileOutputStream outputStream = null;
+        try {
+            file.createNewFile();
+            outputStream = new FileOutputStream(file, true);
+            outputStream.write(text.getBytes());
+            outputStream.flush();
+            outputStream.close();
+            Snackbar.make(view, "File saved!", Snackbar.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Snackbar.make(view, e.getMessage() + "" + name, Snackbar.LENGTH_SHORT).show();
+        }
     }
 }

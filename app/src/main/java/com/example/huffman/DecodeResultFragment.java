@@ -11,20 +11,17 @@ import androidx.fragment.app.Fragment;
 import com.google.gson.Gson;
 
 public class DecodeResultFragment extends Fragment {
-    private static final String ARG_PARAM1 = "CODE";
-    private static final String ARG_PARAM2 = "ROOT";
-    private HuffmanNode root;
-    private String rootString;
-    private String code;
+    private static final String ARG_PARAM1 = "DATA";
+    private String dataStr;
+    private HuffmanEncodeData data;
 
     public DecodeResultFragment() {
         // Required empty public constructor
     }
-    public static DecodeResultFragment newInstance(String param1, String param2) {
+    public static DecodeResultFragment newInstance(String param1) {
         DecodeResultFragment fragment = new DecodeResultFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -33,11 +30,9 @@ public class DecodeResultFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            code = getArguments().getString(ARG_PARAM1);
-            String rootJson = getArguments().getString(ARG_PARAM2);
+            dataStr = getArguments().getString(ARG_PARAM1);
             Gson gson = new Gson();
-            root = gson.fromJson(rootJson, HuffmanNode.class);
-            rootString = rootJson;
+            data = gson.fromJson(dataStr, HuffmanEncodeData.class);
         }
     }
 
@@ -47,7 +42,7 @@ public class DecodeResultFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_decode_result, container, false);
         TextView name = (TextView) rootView.findViewById(R.id.decoded_text);
-        String decoded = Huffman.Decode(code, root);
+        String decoded = Huffman.Decode(data.code, data.root);
         name.setText(decoded);
         return rootView;
     }

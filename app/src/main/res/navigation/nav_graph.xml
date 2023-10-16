@@ -3,16 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/home_fragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/home_fragment"
         android:name="com.example.huffman.HomeFragment"
         android:label="@string/home_fragment_label"
         tools:layout="@layout/fragment_home">
-
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            android:id="@+id/action_home_fragment_to_decode_fragment"
+            app:destination="@id/decode_fragment" />
+        <action
+            android:id="@+id/action_home_fragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
     </fragment>
     <fragment
@@ -21,9 +23,6 @@
         android:label="@string/encode_fragment_label"
         tools:layout="@layout/fragment_encode">
 
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
         <action
             android:id="@+id/action_encode_fragment_to_encodeResultFragment"
             app:argType="string"
@@ -44,4 +43,13 @@
         android:name="com.example.huffman.DecodeResultFragment"
         android:label="Decoding result"
         tools:layout="@layout/fragment_decode_result" />
+    <fragment
+        android:id="@+id/decode_fragment"
+        android:name="com.example.huffman.DecodeFragment"
+        android:label="Decode"
+        tools:layout="@layout/fragment_decode" >
+        <action
+            android:id="@+id/action_decode_fragment_to_decodeResultFragment"
+            app:destination="@id/decodeResultFragment" />
+    </fragment>
 </navigation>

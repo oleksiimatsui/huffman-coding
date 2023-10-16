@@ -4,26 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EncodeResultFragment">
+    tools:context=".DecodeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/decoded_text"
-            android:layout_width="341dp"
+        <Button
+            android:id="@+id/open_file_btn"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="76dp"
-            android:text="TextView"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"
+            android:backgroundTint="@color/black"
+            android:text="Open file"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

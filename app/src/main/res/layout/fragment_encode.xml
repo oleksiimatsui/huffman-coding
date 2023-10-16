@@ -16,6 +16,7 @@
             android:id="@+id/button_encode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:backgroundTint="@color/black"
             android:text="Encode"
             app:layout_constraintEnd_toEndOf="parent"
@@ -27,13 +28,15 @@
             android:id="@+id/input_text"
             android:layout_width="347dp"
             android:layout_height="236dp"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="48dp"
+            android:background="@color/white"
             android:backgroundTint="@color/white"
             android:ems="10"
             android:gravity="start|top"
             android:inputType="textMultiLine"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="16dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
