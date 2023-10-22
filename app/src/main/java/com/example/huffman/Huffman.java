@@ -10,7 +10,7 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 public class Huffman {
-    public static void setTable(HuffmanNode root, Map<Character, HuffmanData> table, String s)
+    public static void setTable(HuffmanNode root, Map<String, HuffmanData> table, String s)
     {
         if (root.left == null && root.right == null) {
             table.put(root.c, new HuffmanData(s,root.data));
@@ -42,7 +42,7 @@ public class Huffman {
         System.out.println("ROOT");
         System.out.println(new Gson().toJson(root));
 
-        Map<Character, HuffmanData> table = new HashMap<Character, HuffmanData>();
+        Map<String, HuffmanData> table = new HashMap<String, HuffmanData>();
         if(root.left == null & root.right==null){
             table.put(root.c, new HuffmanData("0",root.data));
         }else {
@@ -54,7 +54,7 @@ public class Huffman {
         });
         String encoded = "";
         for(int i=0; i<text.length;i++){
-            char a = text[i];
+            String a = "" + text[i];
             System.out.println("char " + a);
             String code = table.get(a).code;
             encoded += code;
@@ -74,7 +74,7 @@ public class Huffman {
                 n, new MyComparator());
         for (int i = 0; i < n; i++) {
             HuffmanNode hn = new HuffmanNode();
-            hn.c = charArray[i];
+            hn.c = "" + charArray[i];
             hn.data = getCount(text, charArray[i]);
             hn.left = null;
             hn.right = null;
@@ -93,7 +93,7 @@ public class Huffman {
             q.poll();
             HuffmanNode f = new HuffmanNode();
             f.data = x.data + y.data;
-            f.c = '-';
+            f.c = "-";
             f.left = x;
             f.right = y;
             root = f;
@@ -135,7 +135,7 @@ public class Huffman {
 
 class HuffmanNode {
     int data;
-    char c;
+    String c;
     HuffmanNode left;
     HuffmanNode right;
 }

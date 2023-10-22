@@ -3,6 +3,7 @@ package com.example.huffman;
 import static android.view.View.generateViewId;
 
 import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -17,13 +18,19 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileOutputStream;
-
+import java.util.ArrayList;
 
 public class EncodeResultFragment extends Fragment {
 
@@ -80,7 +87,7 @@ public class EncodeResultFragment extends Fragment {
         data = new HuffmanEncodeData(code, root);
         TableLayout table = (TableLayout) (rootView.findViewById(R.id.encode_table));
         huffmanResult.table.forEach((key, value) -> {
-            char c = key;
+            String c = key;
             int freq = value.freq;
             String codee = value.code;
             TableRow tr_head = new TableRow(this.getContext());
@@ -95,6 +102,44 @@ public class EncodeResultFragment extends Fragment {
 
             table.addView(tr_head);
         });
+
+        ArrayList<String> keys = new ArrayList<String>(huffmanResult.table.keySet());
+        ArrayList<HuffmanData> values = new ArrayList<HuffmanData>(huffmanResult.table.values());
+        ArrayList entries = new ArrayList<>();
+        ArrayList labels = new ArrayList<String>();
+        ArrayList<Integer> freqs = new ArrayList<Integer>();
+        for (int i = 0; i < keys.size(); i++)
+        {
+            String label = keys.get(i);
+            labels.add(label);
+            freqs.add(values.get(i).freq);
+            entries.add(new BarEntry(i, values.get(i).freq, label));
+        }
+
+        BarDataSet set = new BarDataSet(entries, "");
+        set.setColor(Color.parseColor("#efff8a"));
+        BarData data = new BarData(set);
+        data.setBarWidth(0.7f); // set custom bar width
+        BarChart chart = rootView.findViewById(R.id.chart);
+        chart.setData(data);
+        chart.setFitBars(true); // make the x-axis fit exactly all bars
+        chart.getDescription().setEnabled(false);
+        chart.getLegend().setEnabled(false);
+        XAxis xAxis = chart.getXAxis();
+        chart.getAxisLeft().setGranularity(1.0f);
+        chart.getAxisRight().setEnabled(false);
+        chart.getAxisLeft().setGranularityEnabled(true); // Required to enable granularity
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+
+        chart.setExtraBottomOffset(14f);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextSize(14f);
+        xAxis.setTextColor(Color.parseColor("#efff8a"));
+        chart.getAxisLeft().setTextColor(Color.parseColor("#efff8a"));
+        chart.setTouchEnabled(false);
+        chart.setScaleEnabled(false);
+        xAxis.setLabelCount(keys.size());
+        chart.invalidate(); // refresh
 
         return rootView;
     }
