@@ -43,7 +43,11 @@ public class Huffman {
         System.out.println(new Gson().toJson(root));
 
         Map<Character, HuffmanData> table = new HashMap<Character, HuffmanData>();
-        Huffman.setTable(root, table, "");
+        if(root.left == null & root.right==null){
+            table.put(root.c, new HuffmanData("0",root.data));
+        }else {
+            Huffman.setTable(root, table, "");
+        }
         System.out.println("TABLE");
         table.forEach((key, value) -> {
             System.out.println(key + ": " + value.code);

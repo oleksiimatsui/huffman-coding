@@ -44,6 +44,14 @@ public class HomeFragment extends Fragment {
                         .navigate(R.id.action_home_fragment_to_decode_fragment);
             }
         });
+
+        binding.buttonToAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(HomeFragment.this)
+                        .navigate(R.id.action_home_fragment_to_aboutFragment);
+            }
+        });
     }
 
     @Override

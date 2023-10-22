@@ -107,8 +107,8 @@ public class EncodeResultFragment extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 Gson gson = new Gson();
-                String rootString = gson.toJson(data);
-                bundle.putString("EncodeData", rootString);
+                String dataString = gson.toJson(data);
+                bundle.putString("DATA", dataString);
                 NavHostFragment.findNavController(EncodeResultFragment.this)
                         .navigate(R.id.action_encodeResultFragment_to_decodeResultFragment, bundle);
             }
@@ -122,8 +122,6 @@ public class EncodeResultFragment extends Fragment {
                 dialog.setContentView(R.layout.name_dialog);
                 dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
                 dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-
 
                 View save = dialog.findViewById(R.id.save_file_btn);
                 save.setOnClickListener(new View.OnClickListener() {

@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_home_fragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+        <action
+            android:id="@+id/action_home_fragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -52,4 +55,9 @@
             android:id="@+id/action_decode_fragment_to_decodeResultFragment"
             app:destination="@id/decodeResultFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.huffman.AboutFragment"
+        android:label="About developer"
+        tools:layout="@layout/fragment_about" />
 </navigation>
