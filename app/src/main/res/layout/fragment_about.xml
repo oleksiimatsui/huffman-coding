@@ -28,7 +28,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:background="@color/head"
+            android:padding="8dp"
             android:text="Застосунок розробив студент групи ТТП-42 Мацуй Олексій Михайлович в рамках лабораторної роботи 1 з дисципліни ''Розробка ПЗ під мобільні платформи''."
+            android:textSize="16sp"
+            app:circularflow_radiusInDP="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView" />

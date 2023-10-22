@@ -1,11 +1,16 @@
 package com.example.huffman;
 
+import android.util.Pair;
+
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Set;
 
@@ -19,25 +24,41 @@ public class Huffman {
         if(root.left != null) setTable(root.left,table, s + "0");
         if(root.right != null) setTable(root.right, table, s + "1");
     }
+    private final static String[] cmpztSmbls = {"ch", "sh", "th", "wh"};
+    private static ArrayList<String> compositeSymbols = new ArrayList<String>(Arrays.asList(cmpztSmbls));
+    public static Pair<Set<String>,ArrayList<String>> getCharsAndTextArray(String textStr){
+        Set<String> chars = new LinkedHashSet<String>();
+        ArrayList<String> text = new ArrayList<String>();
+        int i =0 ;
+        for (i = 0; i<textStr.length()-1; i++){
+            char c = textStr.charAt(i);
+            char c1 = textStr.charAt(i+1);
+            String composite = "" + c + c1;
+            String symb = "";
+            if(compositeSymbols.contains(composite)){
+                symb = composite;
+                i = i+1;
+            }else{
+                symb = ""+c;
+            }
+            if(chars.contains(symb)){
 
-    private static char[] getChars(char[] text){
-        Set<Character> set = new LinkedHashSet<Character>();
-        for(int i=0; i<text.length;i++){
-            char a = text[i];
-            set.add(a);
+            }else{
+                chars.add(symb);
+            }
+            text.add(symb);
         }
-
-        int n = set.size();
-        char[] charArray = new char[n];
-        int i = 0;
-        for (char x : set)
-            charArray[i++] = x;
-        return charArray;
+        if(i==textStr.length()-1){
+            text.add(textStr.charAt(i) + "");
+            chars.add(textStr.charAt(i) + "");
+        }
+        return new Pair<Set<String>,ArrayList<String>>(chars, text);
     }
 
     public static HuffmanEncodeResult Encode(String textStr){
-        char[] text = textStr.toCharArray();
-        char[] charArray = getChars(text);
+        Pair<Set<String>, ArrayList<String>> charsAndArray = getCharsAndTextArray(textStr);
+        ArrayList<String> text = charsAndArray.second;
+        Set<String> charArray = charsAndArray.first;
         HuffmanNode root = Huffman.GetTreeRoot(text, charArray);
         System.out.println("ROOT");
         System.out.println(new Gson().toJson(root));
@@ -53,8 +74,8 @@ public class Huffman {
             System.out.println(key + ": " + value.code);
         });
         String encoded = "";
-        for(int i=0; i<text.length;i++){
-            String a = "" + text[i];
+        for(int i=0; i<text.size();i++){
+            String a = "" + text.get(i);
             System.out.println("char " + a);
             String code = table.get(a).code;
             encoded += code;
@@ -64,18 +85,20 @@ public class Huffman {
     }
 
 
-    public static HuffmanNode GetTreeRoot(char[] text, char[] charArray)
+    public static HuffmanNode GetTreeRoot(ArrayList<String> text, Set<String> chars)
     {
-        Set<Character> set = new LinkedHashSet<Character>();
-        int n = charArray.length;
 
+        int n = chars.size();
+        String[] symbols = new String[n];
+        chars.toArray(symbols);
+        System.out.println("String is " + text);
         PriorityQueue<HuffmanNode> q
                 = new PriorityQueue<HuffmanNode>(
                 n, new MyComparator());
         for (int i = 0; i < n; i++) {
             HuffmanNode hn = new HuffmanNode();
-            hn.c = "" + charArray[i];
-            hn.data = getCount(text, charArray[i]);
+            hn.c = symbols[i];
+            hn.data = getCount(text, symbols[i]);
             hn.left = null;
             hn.right = null;
             System.out.println(hn.c + ": " + hn.data);
@@ -104,13 +127,14 @@ public class Huffman {
     }
 
 
-    private static int  getCount(char[] text, char c){
+    private static int  getCount(ArrayList<String> text, String c){
         int count = 0;
-        for (int i = 0; i < text.length; i++) {
-            if (text[i] == c) {
+        for (int i = 0; i < text.size(); i++) {
+            if (Objects.equals(text.get(i), c)) {
                 count++;
             }
         }
+        System.out.println(text + " contains " + c + " " + count + " times!");
         return count;
     }
 
